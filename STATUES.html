@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Statues | Obsidian Arc Lab</title>
+<link rel="stylesheet" href="style.css">
+<script src="app.js" defer></script>
+</head>
+
+<body class="statue-page">
+
+<header class="navbar">
+  <div class="logo">Obsidian Arc<br><span>LAB · EST. 2026</span></div>
+  <nav>
+    <a href="index.html">HOME</a>
+    <a href="collection.html">COLLECTION</a>
+    <a href="cart.html">CART 🛒</a>
+  </nav>
+</header>
+
+<section class="statue-hero">
+  <p class="small">— SACRED PRINTED SCULPTURES</p>
+  <h1>Statues Collection</h1>
+  <p>Click any statue to view full details, colours and angles.</p>
+</section>
+
+<section class="statue-list">
+
+  <div class="statue-thumb" onclick="openProduct('ganesha')">
+    <img src="https://via.placeholder.com/500x500/d4af37/000000?text=Mini+Ganesha">
+    <h2>Mini Ganesha</h2>
+  </div>
+
+  <div class="statue-thumb" onclick="openProduct('anjaneya')">
+    <img src="https://via.placeholder.com/500x500/111111/d4af37?text=Mini+Anjaneya">
+    <h2>Mini Anjaneya</h2>
+  </div>
+
+</section>
+
+<!-- PRODUCT DETAIL MODAL -->
+<div id="productModal" class="modal">
+  <div class="modal-box">
+
+    <button class="close-btn" onclick="closeProduct()">×</button>
+
+    <div class="modal-grid">
+
+      <div>
+        <img id="mainImg" class="main-product-img">
+
+        <div class="angle-row">
+          <img id="frontImg" onclick="changeAngle('front')">
+          <img id="sideImg" onclick="changeAngle('side')">
+          <img id="backImg" onclick="changeAngle('back')">
+        </div>
+      </div>
+
+      <div class="detail-info">
+        <p class="small">OBSIDIAN ARC LAB</p>
+        <h2 id="productName"></h2>
+        <p id="productPrice" class="price"></p>
+
+        <p><b>Size:</b> <span id="productSize"></span></p>
+        <p><b>Material:</b> <span id="productMaterial"></span></p>
+        <p><b>Weight:</b> <span id="productWeight"></span></p>
+        <p id="productDesc"></p>
+
+        <label>Choose Colour</label>
+        <select id="colourSelect" onchange="changeColour()"></select>
+
+        <button onclick="addSelectedToCart()">ADD TO CART</button>
+        <button class="whatsapp-btn" onclick="askWhatsapp()">ASK ON WHATSAPP</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+let currentProduct = "";
+let currentColour = "";
+let currentAngle = "front";
+
+const products = {
+  ganesha: {
+    name: "Mini Ganesha",
+    desc: "Premium mini Ganesha statue for car dashboard, prayer room, gifting and decoration.",
+    colours: {
+      Gold: {
+        price: 120,
+        size: "10cm height",
+        material: "Gold Silk PLA",
+        weight: "180g approx",
+        front: "https://via.placeholder.com/500x500/d4af37/000000?text=Ganesha+Gold+Front",
+        side: "https://via.placeholder.com/500x500/d4af37/000000?text=Ganesha+Gold+Side",
+        back: "https://via.placeholder.com/500x500/d4af37/000000?text=Ganesha+Gold+Back"
+      },
+      Black: {
+        price: 110,
+        size: "10cm height",
+        material: "Matte Black PLA+",
+        weight: "175g approx",
+        front: "https://via.placeholder.com/500x500/000000/ffffff?text=Ganesha+Black+Front",
+        side: "https://via.placeholder.com/500x500/000000/ffffff?text=Ganesha+Black+Side",
+        back: "https://via.placeholder.com/500x500/000000/ffffff?text=Ganesha+Black+Back"
+      },
+      Stone: {
+        price: 130,
+        size: "10cm height",
+        material: "Stone Texture PLA",
+        weight: "190g approx",
+        front: "https://via.placeholder.com/500x500/999999/000000?text=Ganesha+Stone+Front",
+        side: "https://via.placeholder.com/500x500/999999/000000?text=Ganesha+Stone+Side",
+        back: "https://via.placeholder.com/500x500/999999/000000?text=Ganesha+Stone+Back"
+      }
+    }
+  },
+
+  anjaneya: {
+    name: "Mini Anjaneya",
+    desc: "Detailed mini Anjaneya statue suitable for spiritual décor, gifting and custom colour printing.",
+    colours: {
+      Gold: {
+        price: 130,
+        size: "12cm height",
+        material: "Gold Silk PLA",
+        weight: "200g approx",
+        front: "https://via.placeholder.com/500x500/d4af37/000000?text=Anjaneya+Gold+Front",
+        side: "https://via.placeholder.com/500x500/d4af37/000000?text=Anjaneya+Gold+Side",
+        back: "https://via.placeholder.com/500x500/d4af37/000000?text=Anjaneya+Gold+Back"
+      },
+      Black: {
+        price: 120,
+        size: "12cm height",
+        material: "Matte Black PLA+",
+        weight: "195g approx",
+        front: "https://via.placeholder.com/500x500/000000/ffffff?text=Anjaneya+Black+Front",
+        side: "https://via.placeholder.com/500x500/000000/ffffff?text=Anjaneya+Black+Side",
+        back: "https://via.placeholder.com/500x500/000000/ffffff?text=Anjaneya+Black+Back"
+      }
+    }
+  }
+};
+
+function openProduct(id){
+  currentProduct = id;
+  currentAngle = "front";
+
+  let product = products[id];
+  let colours = Object.keys(product.colours);
+
+  document.getElementById("productName").innerText = product.name;
+  document.getElementById("productDesc").innerText = product.desc;
+
+  let select = document.getElementById("colourSelect");
+  select.innerHTML = "";
+
+  colours.forEach(colour => {
+    select.innerHTML += `<option value="${colour}">${colour}</option>`;
+  });
+
+  currentColour = colours[0];
+  select.value = currentColour;
+
+  updateDetails();
+  document.getElementById("productModal").style.display = "flex";
+}
+
+function closeProduct(){
+  document.getElementById("productModal").style.display = "none";
+}
+
+function changeColour(){
+  currentColour = document.getElementById("colourSelect").value;
+  currentAngle = "front";
+  updateDetails();
+}
+
+function changeAngle(angle){
+  currentAngle = angle;
+  updateDetails();
+}
+
+function updateDetails(){
+  let data = products[currentProduct].colours[currentColour];
+
+  document.getElementById("productPrice").innerText = "RM " + data.price;
+  document.getElementById("productSize").innerText = data.size;
+  document.getElementById("productMaterial").innerText = data.material;
+  document.getElementById("productWeight").innerText = data.weight;
+
+  document.getElementById("mainImg").src = data[currentAngle];
+
+  document.getElementById("frontImg").src = data.front;
+  document.getElementById("sideImg").src = data.side;
+  document.getElementById("backImg").src = data.back;
+}
+
+function addSelectedToCart(){
+  let data = products[currentProduct].colours[currentColour];
+
+  addToCart(products[currentProduct].name, data.price, {
+    color: currentColour,
+    size: data.size,
+    material: data.material,
+    weight: data.weight
+  });
+}
+
+function askWhatsapp(){
+  let phone = "60123456789";
+  let name = products[currentProduct].name;
+
+  let msg = `Hi Obsidian Arc Lab, I want to ask about ${name} in ${currentColour} colour.`;
+  window.open(`https://wa.me/${phone}?text=${encodeURIComponent(msg)}`, "_blank");
+}
+</script>
+
+</body>
+</html>

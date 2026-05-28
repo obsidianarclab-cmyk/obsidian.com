@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Checkout | Obsidian Arc Lab</title>
+
+<link rel="stylesheet" href="style.css">
+<script src="app.js"></script>
+
+</head>
+
+<body class="cart-page">
+
+<header class="navbar">
+
+  <div class="logo">
+    Obsidian Arc<br>
+    <span>LAB · EST. 2026</span>
+  </div>
+
+  <nav>
+    <a href="index.html">HOME</a>
+    <a href="collection.html">COLLECTION</a>
+    <a href="cart.html">CART</a>
+  </nav>
+
+</header>
+
+<section class="cart-hero">
+
+  <p class="small">— SECURE CHECKOUT</p>
+
+  <h1>Checkout</h1>
+
+  <p>
+    Fill in all details to confirm your order.
+  </p>
+
+</section>
+
+<section class="checkout-form">
+
+  <!-- RECEIVER -->
+
+  <h2>Receiver Details</h2>
+
+  <input
+  id="receiverName"
+  placeholder="Receiver Name">
+
+  <input
+  id="receiverPhone"
+  placeholder="Receiver Phone Number">
+
+  <textarea
+  id="receiverAddress"
+  placeholder="Full Delivery Address"></textarea>
+
+  <!-- PAYMENT -->
+
+  <h2>Payment Information</h2>
+
+  <input
+  id="payerName"
+  placeholder="Payment By Name">
+
+  <input
+  id="payerPhone"
+  placeholder="Payment By Phone Number">
+
+  <!-- PAYMENT METHOD -->
+
+  <h2>Payment Method</h2>
+
+  <select
+  id="paymentMethod"
+  onchange="showPaymentOption()">
+
+    <option value="">
+      Select Payment Method
+    </option>
+
+    <option value="Bank Transfer">
+      Bank Transfer
+    </option>
+
+    <option value="DuitNow QR">
+      DuitNow QR
+    </option>
+
+  </select>
+
+  <!-- QR -->
+
+  <div id="qrBox" class="qr-box">
+
+    <h3>Scan QR Code</h3>
+
+    <img src="qr.png" alt="QR Code">
+
+    <p>
+      After payment, upload receipt or enter reference ID.
+    </p>
+
+  </div>
+
+  <!-- PAYMENT PROOF -->
+
+  <h2>Payment Proof</h2>
+
+  <select
+  id="proofType"
+  onchange="showProofOption()">
+
+    <option value="">
+      Select Proof Type
+    </option>
+
+    <option value="reference">
+      Reference ID
+    </option>
+
+    <option value="receipt">
+      Upload Receipt
+    </option>
+
+  </select>
+
+  <input
+  id="referenceId"
+  placeholder="Enter Reference ID">
+
+  <input
+  type="file"
+  id="receiptUpload"
+  accept="image/*,.pdf">
+
+  <!-- BUTTON -->
+
+  <button onclick="submitOrder()">
+    SUBMIT ORDER
+  </button>
+
+</section>
+
+<script>
+
+/* PAYMENT METHOD */
+
+function showPaymentOption(){
+
+  let method =
+  document.getElementById("paymentMethod").value;
+
+  document.getElementById("qrBox").style.display =
+    method === "DuitNow QR"
+    ? "block"
+    : "none";
+}
+
+/* PROOF OPTION */
+
+function showProofOption(){
+
+  let proof =
+  document.getElementById("proofType").value;
+
+  document.getElementById("referenceId").style.display =
+    proof === "reference"
+    ? "block"
+    : "none";
+
+  document.getElementById("receiptUpload").style.display =
+    proof === "receipt"
+    ? "block"
+    : "none";
+}
+
+/* PHONE VALIDATION */
+
+function isValidPhone(phone){
+
+  return /^01[0-9]{8,9}$/.test(phone);
+
+}
+
+/* SUBMIT */
+
+function submitOrder(){
+
+  let receiverName =
+  document.getElementById("receiverName").value.trim();
+
+  let receiverPhone =
+  document.getElementById("receiverPhone").value.trim();
+
+  let receiverAddress =
+  document.getElementById("receiverAddress").value.trim();
+
+  let payerName =
+  document.getElementById("payerName").value.trim();
+
+  let payerPhone =
+  document.getElementById("payerPhone").value.trim();
+
+  let paymentMethod =
+  document.getElementById("paymentMethod").value;
+
+  let proofType =
+  document.getElementById("proofType").value;
+
+  let referenceId =
+  document.getElementById("referenceId").value.trim();
+
+  let receiptUpload =
+  document.getElementById("receiptUpload").files.length;
+
+  /* REQUIRED */
+
+  if(
+    !receiverName ||
+    !receiverPhone ||
+    !receiverAddress ||
+    !payerName ||
+    !payerPhone ||
+    !paymentMethod ||
+    !proofType
+  ){
+
+    alert("Please fill in all required information.");
+    return;
+  }
+
+  /* PHONE */
+
+  if(!isValidPhone(receiverPhone)){
+
+    alert(
+      "Receiver phone number is not valid. Example: 0123456789"
+    );
+
+    return;
+  }
+
+  if(!isValidPhone(payerPhone)){
+
+    alert(
+      "Payment By phone number is not valid. Example: 0123456789"
+    );
+
+    return;
+  }
+
+  /* REFERENCE */
+
+  if(
+    proofType === "reference" &&
+    referenceId === ""
+  ){
+
+    alert("Please enter payment reference ID.");
+    return;
+  }
+
+  /* RECEIPT */
+
+  if(
+    proofType === "receipt" &&
+    receiptUpload === 0
+  ){
+
+    alert("Please upload payment receipt.");
+    return;
+  }
+
+  /* SUCCESS POPUP */
+
+  document.body.innerHTML += `
+
+  <div class="success-popup">
+
+    <div class="success-box">
+
+      <div class="success-icon">✓</div>
+
+      <h2>Thank You For Your Order</h2>
+
+      <p>
+        Your payment submission has been received successfully.
+        Our team will verify your order shortly.
+      </p>
+
+      <button onclick="goHome()">
+        RETURN HOME
+      </button>
+
+    </div>
+
+  </div>
+
+  `;
+
+  localStorage.removeItem("obsidian_cart");
+}
+
+/* HOME */
+
+function goHome(){
+
+  window.location.href = "index.html";
+
+}
+
+showPaymentOption();
+showProofOption();
+
+</script>
+
+</body>
+</html>

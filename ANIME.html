@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Anime</title>
+<link rel="stylesheet" href="style.css">
+<script src="app.js"></script>
+</head>
+
+<body>
+
+<header>
+  <a href="index.html">⬅ Home</a>
+  <a href="cart.html">Cart 🛒</a>
+</header>
+
+<h2 class="title">Anime Collection</h2>
+
+<div class="product">
+
+  <h3>Anime Hero Figure</h3>
+  <p>RM 60</p>
+
+  <label>Color:</label>
+  <select id="animeColor">
+    <option>Black</option>
+    <option>White</option>
+    <option>Red</option>
+  </select>
+
+  <button onclick="addToCart('Anime Hero Figure', 60, getAnimeData())">
+    Add to Cart
+  </button>
+
+</div>
+
+<script>
+function getAnimeData(){
+  return {
+    color: document.getElementById("animeColor").value
+  };
+}
+</script>
+
+</body>
+</html>
