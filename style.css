@@ -73,7 +73,7 @@ nav a:hover{
   height:100vh;
   background:
     linear-gradient(rgba(0,0,0,.45), rgba(0,0,0,.65)),
-    url("MAIN WALLPAPER.PNG")
+    url("main wallpaper.png")
     center/cover no-repeat;
 
   display:flex;
