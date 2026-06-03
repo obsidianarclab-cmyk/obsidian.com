@@ -79,7 +79,7 @@ function checkout(){
 function sendCartWhatsapp(){
   cart = JSON.parse(localStorage.getItem("obsidian_cart")) || [];
 
-  let phone = "60123456789";
+  let phone = "60175819904";
 
   if(cart.length === 0){
     alert("Cart is empty");
