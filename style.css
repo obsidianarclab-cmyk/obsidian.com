@@ -1472,7 +1472,7 @@ button:hover{
   align-items:center;
   background:
     linear-gradient(rgba(0,0,0,.55), rgba(0,0,0,.82)),
-    url("ANIME.JPEG")
+    url("anime.jpeg")
     center/cover no-repeat;
 }
 
@@ -1938,7 +1938,7 @@ button:hover{
     rgba(0,0,0,.72),
     rgba(0,0,0,.88)
   ),
-  url("https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=1800&auto=format&fit=crop")
+  url("r.png")
   center/cover no-repeat;
 }
 
